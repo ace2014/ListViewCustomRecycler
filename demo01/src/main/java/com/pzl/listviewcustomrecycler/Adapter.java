@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.pzl.listviewcustomrecycler.test.PushJson;
 import com.pzl.listviewcustomrecycler.test.RootJson;
-import com.pzl.recycler.RecycleLayout;
-import com.pzl.recycler.RecycleManager;
+import com.pzl.recycler.IRecycleManager;
+import com.pzl.recycler.Recycler;
 
 import java.util.List;
 
@@ -25,12 +25,12 @@ import java.util.List;
 public class Adapter extends BaseAdapter {
     private List<RootJson> rootJsonList;
     private Gson gson;
-    private RecycleManager recycleManager;
+    private Recycler recycler;
 
     public Adapter(Context context) {
         gson = new Gson();
-        recycleManager = RecycleManager.getInstance();
-        recycleManager.init(LayoutInflater.from(context));
+        recycler = Recycler.getInstance();
+        recycler.init(LayoutInflater.from(context));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Adapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
-        LinearLayout container = (LinearLayout) recycleManager.getView(R.layout.container, RecycleLayout.CONTAINER, position);
+        LinearLayout container = (LinearLayout) recycler.getView(R.layout.container, IRecycleManager.CONTAINER, position);
 
         RootJson rootJson = rootJsonList.get(position);
         PushJson pushJson = gson.fromJson(rootJson.pushjson, PushJson.class);
@@ -64,7 +64,7 @@ public class Adapter extends BaseAdapter {
         /**
          * 设置日期
          */
-        LinearLayout date = (LinearLayout) recycleManager.getView(R.layout.item_date, RecycleLayout.ONLY_CHILD, position);
+        LinearLayout date = (LinearLayout) recycler.getView(R.layout.item_date, IRecycleManager.ONLY_CHILD, position);
 
         TextView tvDate = (TextView) date.findViewById(R.id.tvDate);
         tvDate.setText(rootJson.date);
@@ -73,7 +73,7 @@ public class Adapter extends BaseAdapter {
         /**
          * 设置日期下面那整块，容器
          */
-        LinearLayout card = (LinearLayout) recycleManager.getView(R.layout.container_card, RecycleLayout.CONTAINER, position);
+        LinearLayout card = (LinearLayout) recycler.getView(R.layout.container_card, IRecycleManager.CONTAINER, position);
 
         container.addView(card, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -84,7 +84,7 @@ public class Adapter extends BaseAdapter {
          * 设置第一项
          */
 
-        LinearLayout first = (LinearLayout) recycleManager.getView(R.layout.item_lv, RecycleLayout.ONLY_CHILD, position);
+        LinearLayout first = (LinearLayout) recycler.getView(R.layout.item_lv, IRecycleManager.ONLY_CHILD, position);
 
         // LinearLayout first = (LinearLayout) inflater.inflate(R.layout.item_lv, null);
         TextView tvFirstKey = (TextView) first.findViewById(R.id.tvKey);
@@ -100,7 +100,7 @@ public class Adapter extends BaseAdapter {
 
         for (int i = 0; i <= keys.length - 1 - 2; i++) {
 
-            LinearLayout itemCenter = (LinearLayout) recycleManager.getView(R.layout.item_lv, RecycleLayout.ONLY_CHILD, position);
+            LinearLayout itemCenter = (LinearLayout) recycler.getView(R.layout.item_lv, IRecycleManager.ONLY_CHILD, position);
 
             // LinearLayout itemCenter = (LinearLayout) inflater.inflate(R.layout.item_lv, null);
             TextView tvCenterKey = (TextView) itemCenter.findViewById(R.id.tvKey);
@@ -113,7 +113,7 @@ public class Adapter extends BaseAdapter {
         /**
          * 设置最后一项
          */
-        LinearLayout remark = (LinearLayout) recycleManager.getView(R.layout.item_lv, RecycleLayout.ONLY_CHILD, position);
+        LinearLayout remark = (LinearLayout) recycler.getView(R.layout.item_lv, IRecycleManager.ONLY_CHILD, position);
         // LinearLayout remark = (LinearLayout) inflater.inflate(R.layout.item_lv, null);
         TextView tvRemarkKey = (TextView) remark.findViewById(R.id.tvKey);
         TextView tvRemarkValue = (TextView) remark.findViewById(R.id.tvValue);
@@ -123,11 +123,7 @@ public class Adapter extends BaseAdapter {
         tvRemarkValue.setTextColor(Color.BLUE);
         card.addView(remark, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-        recycleManager.recycle(R.layout.item_date, (ListView) parent);
-        recycleManager.recycle(R.layout.container, (ListView) parent);
-        recycleManager.recycle(R.layout.container_card, (ListView) parent);
-        recycleManager.recycle(R.layout.item_lv, (ListView) parent);
-
+        recycler.recycle(new int[]{R.layout.item_date, R.layout.container, R.layout.container_card, R.layout.item_lv}, (ListView) parent);
         return container;
     }
 
@@ -136,5 +132,6 @@ public class Adapter extends BaseAdapter {
         Log.e("pzl", "rootJsonList.size()=" + rootJsonList.size());
 
     }
+
 
 }

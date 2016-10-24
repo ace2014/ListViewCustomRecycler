@@ -1,5 +1,6 @@
 package com.pzl.recycler;
 
+import android.view.View;
 import android.widget.ListView;
 
 /**
@@ -7,23 +8,32 @@ import android.widget.ListView;
  * @version [1.0, 2016-10-20]
  */
 public interface IRecycleManager {
+    /**
+     * 仅仅作为子布局
+     */
+    int ONLY_CHILD = 1;
+    /**
+     * 作为容器
+     */
+    int CONTAINER = 2;
+
 
     /**
-     * 创建活跃的布局
+     * 获得重用的view或创建新的活跃的view
      *
      * @param layoutId
-     * @param recycleLayout
+     * @param recycleType
+     * @param currentPosition
+     * @return
      */
-    void createActiveLayout(Integer layoutId, RecycleLayout recycleLayout);
-
-    RecycleLayout getRecycleView(Integer layoutId);
+    View getView(int layoutId, int recycleType, int currentPosition);
 
     /**
      * 回收活跃的布局
      *
-     * @param layoutId
+     * @param layoutIds
      * @param listView
      */
-    void recycle(Integer layoutId, ListView listView);
+    void recycle(int[] layoutIds, ListView listView);
 
 }

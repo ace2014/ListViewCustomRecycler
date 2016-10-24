@@ -7,9 +7,6 @@ import android.view.View;
  * @version [1.0, 2016-10-21]
  */
 public class RecycleLayout {
-    public static final int ONLY_CHILD = 1;
-    public static final int CONTAINER = 2;
-
     /**
      * 布局类型（1 子布局 ； 2 容器布局）
      */
